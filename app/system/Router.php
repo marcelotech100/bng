@@ -1,6 +1,7 @@
 <?php
 
 namespace bng\System;
+
 use bng\Controllers\Main;
 use Exception;
 
@@ -41,7 +42,7 @@ class Router
             $controller = new $class();
             $controller->$method(...$parameters);
         } catch (Exception $err) {
-             die($err->getMessage());
+            die($err->getMessage());
         }
     }
 }
