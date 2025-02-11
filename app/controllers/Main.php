@@ -1,16 +1,13 @@
 <?php
 
 namespace bng\Controllers;
+use bng\Controllers\BaseController;
 
-class Main 
+class Main extends BaseController
 {
-   public function index($id = null)
+   public function index()
    {
-      echo "Estou dentro do controlador Main - index<br>";
+      $this->view();
    }
 
-   public function teste()
-   {
-      die("Aqui no teste");
-   }
 }
