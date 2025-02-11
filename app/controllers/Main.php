@@ -1,13 +1,18 @@
 <?php
 
 namespace bng\Controllers;
+
 use bng\Controllers\BaseController;
 
 class Main extends BaseController
 {
    public function index()
    {
-      $this->view();
-   }
+      $data['nome'] = 'João';
+      $data['apelido'] = 'Ribeiro';
 
+      $this->view('layouts/html_header');
+      $this->view('home', $data);
+      $this->view('layouts/html_footer');
+   }
 }
