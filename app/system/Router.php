@@ -1,6 +1,8 @@
 <?php
 
 namespace bng\System;
+use bng\Controllers\Main;
+use Exception;
 
 class Router
 {
@@ -33,9 +35,13 @@ class Router
             unset($parameters['mt']);
         }
 
-        var_dump($httpverb);
-        var_dump($controller);
-        var_dump($method);
-        var_dump($parameters);
+        // tries to instantiate the controller and execute the method
+        try {
+            $class = "bng\Controllers\\$controller";
+            $controller = new $class();
+            $controller->$method(...$parameters);
+        } catch (Exception $err) {
+             die($err->getMessage());
+        }
     }
 }
