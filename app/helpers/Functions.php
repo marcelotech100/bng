@@ -1,5 +1,11 @@
 <?php
 
+function check_session()
+{
+    // check if there is no active session
+    return isset($_SESSION['user']);
+}
+
 function printData($data, $die = true)
 {
     echo "<pre>";
@@ -10,7 +16,7 @@ function printData($data, $die = true)
         echo $data;
     }
 
-    if($die) {
+    if ($die) {
         die("<br>FIM<br>");
     }
 }
