@@ -24,4 +24,9 @@ abstract class BaseModel
     {
         return $this->db->execute_query($sql, $params);
     }
+
+    public function non_query($sql = "", $params = [])
+    {
+        return $this->db->execute_non_query($sql, $params);
+    }
 }
