@@ -7,3 +7,7 @@
 [2025-02-15T15:19:22.304176+00:00] app_logs.INFO: agente1@bng.com - login com sucesso [] []
 [2025-02-15T15:19:38.663063+00:00] app_logs.INFO: agente1@bng.com - fez logout [] []
 [2025-02-15T15:19:49.914905+00:00] app_logs.INFO:  - fez logout [] []
+[2025-02-15T15:42:13.614590+00:00] app_logs.INFO: admin@bng.com - login com sucesso [] []
+[2025-02-15T15:42:37.220792+00:00] app_logs.INFO: admin@bng.com - fez logout [] []
+[2025-02-15T15:42:53.321009+00:00] app_logs.INFO: agente1@bng.com - login com sucesso [] []
+[2025-02-15T15:43:22.266313+00:00] app_logs.INFO: agente1@bng.com - fez logout [] []

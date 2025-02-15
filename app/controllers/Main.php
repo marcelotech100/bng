@@ -118,7 +118,7 @@ class Main extends BaseController
 
       // load user information to the session
       $results = $model->get_user_data($username);
-      
+
       // add user to session
       $_SESSION['user'] = $results['data'];
 
@@ -129,8 +129,14 @@ class Main extends BaseController
       $this->index();
    }
 
-   public function logout() 
+   public function logout()
    {
+      //disable direct access to logout
+      if (!check_session()) {
+         $this->index();
+         return;
+      }
+
       //logger
       logger($_SESSION['user']->name . ' - fez logout');
 
