@@ -41,4 +41,28 @@ class Agents extends BaseModel
             'status' => true
         ];
     }
+
+    public function get_user_data($username)
+    {
+        // get all necessary user data to insert in the session
+        $params = [
+            ':username' => $username
+        ];
+
+        $this->db_connect();
+        $results = $this->query(
+            "SELECT " .
+                "id, " .
+                "AES_DECRYPT(name, '" . MYSQL_AES_KEY . "') name, " .
+                "profile " .
+                "FROM agents " .
+                "WHERE AES_ENCRYPT(:username, '" . MYSQL_AES_KEY . "') = name",
+            $params
+        );
+
+        return [
+            'status' => 'success',
+            'data' => $results->results[0]
+        ];
+    }
 }
