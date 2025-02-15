@@ -104,11 +104,17 @@ class Main extends BaseController
       $result = $model->check_login($username, $password);
       if (!$result['status']) {
 
+         //logger
+         logger("$username - login inválido", 'error');
+
          // invalid login
          $_SESSION['server_error'] = 'Login inválido';
          $this->login_frm();
          return;
       }
+
+      // logger
+      logger("$username - login com sucesso");
 
       // load user information to the session
       $results = $model->get_user_data($username);
@@ -125,6 +131,9 @@ class Main extends BaseController
 
    public function logout() 
    {
+      //logger
+      logger($_SESSION['user']->name . ' - fez logout');
+
       // clear user from session
       unset($_SESSION['user']);
 
