@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="pt">
+
 <head>
     <meta charset="UTF-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -16,6 +17,12 @@
     <link rel="stylesheet" href="assets/fontawesome/all.min.css">
     <!-- custom css -->
     <link rel="stylesheet" href="assets/app.css">
+
+    <?php if (isset($flatpickr)): ?>
+        <!-- flatpickr -->
+        <link rel="stylesheet" href="assets/flatpickr/flatpickr.min.css">
+        <script src="assets/flatpickr/flatpickr.js"></script>
+    <?php endif; ?>
 </head>
+
 <body>
-    
