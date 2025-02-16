@@ -27,6 +27,30 @@ class Agent extends BaseController
         $this->view('layouts/html_footer');
     }
 
+    public function new_client_frm()
+    {
+        if (!check_session() || $_SESSION['user']->profile != 'agent') {
+            header('Location: index.php');
+        }
+
+        $data['user'] = $_SESSION['user'];
+
+        $this->view('layouts/html_header');
+        $this->view('navbar', $data);
+        $this->view('insert_client_frm');
+        $this->view('footer');
+        $this->view('layouts/html_footer');
+    }
+
+    public function new_client_submit()
+    {
+        if (!check_session() || $_SESSION['user']->profile != 'agent' || $_SERVER['REQUEST_METHOD'] != 'POST') {
+            header('Location: index.php');
+        }
+
+        printData($_POST);
+    }
+
     public function edit_client($id)
     {
         echo "editar $id";
