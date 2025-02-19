@@ -39,7 +39,9 @@ class Agent extends BaseController
         // check if there are validation errors
         if (!empty($_SESSION['validation_errors'])) {
             $data['validation_errors'] = $_SESSION['validation_errors'];
+            $data['sent_data'] = $_SESSION['sent_data'];
             unset($_SESSION['validation_errors']);
+            unset($_SESSION['sent_data']);
         }
 
         $this->view('layouts/html_header', $data);
@@ -109,6 +111,7 @@ class Agent extends BaseController
         // check if there are validation errors to return to the form
         if (!empty($validation_errors)) {
             $_SESSION['validation_errors'] = $validation_errors;
+            $_SESSION['sent_data'] = $_POST;
             $this->new_client_frm();
             return;
         }
