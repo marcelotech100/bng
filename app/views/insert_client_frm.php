@@ -49,7 +49,7 @@
 
                             <div class="mb-3">
                                 <label for="text_interests" class="form-label">Interesses<span class="ms-4"><small>(Palavras separadas por virgulas)</small></span></label>
-                                <input type="text" class="form-control" name="text_interests" value="<?php isset($sent_data) ? $sent_data['text_interests'] : '' ?>" id="text_interests">
+                                <input type="text" class="form-control" name="text_interests" value="<?php echo isset($sent_data) ? $sent_data['text_interests'] : '' ?>" id="text_interests">
                             </div>
 
                             <div class="mb-3 text-center">
@@ -64,6 +64,12 @@
                                             <li><?= $error ?></li>
                                         <?php endforeach; ?>
                                     </ul>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if (isset($server_error)): ?>
+                                <div class="alert alert-danger p-2 text-center">
+                                    <?= $server_error ?>
                                 </div>
                             <?php endif; ?>
 

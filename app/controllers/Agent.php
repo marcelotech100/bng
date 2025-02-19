@@ -36,13 +36,22 @@ class Agent extends BaseController
         $data['user'] = $_SESSION['user'];
         $data['flatpickr'] = true;
 
+
         // check if there are validation errors
         if (!empty($_SESSION['validation_errors'])) {
             $data['validation_errors'] = $_SESSION['validation_errors'];
             $data['sent_data'] = $_SESSION['sent_data'];
-            unset($_SESSION['validation_errors']);
-            unset($_SESSION['sent_data']);
         }
+
+        // check if there is a server error
+        if (!empty($_SESSION['server_error'])) {
+            $data['server_error'] = $_SESSION['server_error'];
+            $data['sent_data'] = $_SESSION['sent_data'];
+        }
+
+        unset($_SESSION['validation_errors']);
+        unset($_SESSION['server_error']);
+        unset($_SESSION['sent_data']);
 
         $this->view('layouts/html_header', $data);
         $this->view('navbar', $data);
@@ -111,6 +120,19 @@ class Agent extends BaseController
         // check if there are validation errors to return to the form
         if (!empty($validation_errors)) {
             $_SESSION['validation_errors'] = $validation_errors;
+            $_SESSION['sent_data'] = $_POST;
+            $this->new_client_frm();
+            return;
+        }
+
+        // check if the client already exists with the same name
+        $model = new Agents();
+        $results = $model->check_if_client_exists($_POST);
+
+        if ($results['status']) {
+
+            // a person with the same name exists for this agent. Returns a server error.
+            $_SESSION['server_error'] = "Já existe um cliente com esse nome.";
             $_SESSION['sent_data'] = $_POST;
             $this->new_client_frm();
             return;
