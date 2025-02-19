@@ -138,7 +138,11 @@ class Agent extends BaseController
             return;
         }
 
-        printData($_POST);
+        // add new client to the database
+        $model->add_new_client_to_database($_POST);
+
+        // return to the main clients page
+        $this->my_clients();
     }
 
     public function edit_client($id)
