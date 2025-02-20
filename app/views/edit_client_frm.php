@@ -10,7 +10,7 @@
 
                         <hr>
 
-                        <form action="?ct=agent&mt=edit_client_submit" method="post">
+                        <form action="?ct=agent&mt=edit_client_submit" method="post" novalidate>
 
                             <input type="hidden" name="id_client" value="<?= aes_encrypt($client->id) ?>">
 
@@ -65,6 +65,12 @@
                                             <li><?= $error ?></li>
                                         <?php endforeach; ?>
                                     </ul>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if (isset($server_error)): ?>
+                                <div class="alert alert-danger p-2 text-center">
+                                    <?= $server_error ?>
                                 </div>
                             <?php endif; ?>
 

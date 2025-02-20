@@ -186,6 +186,12 @@ class Agent extends BaseController
             unset($_SESSION['validation_errors']);
         }
 
+        // check if there is a server error
+        if (!empty($_SESSION['server_error'])) {
+            $data['server_error'] = $_SESSION['server_error'];
+            unset($_SESSION['server_error']);
+        }
+
         $this->view('layouts/html_header', $data);
         $this->view('navbar', $data);
         $this->view('edit_client_frm', $data);
@@ -267,7 +273,25 @@ class Agent extends BaseController
             return;
         }
 
-        die('OK');
+        // check if there is another agent's client with the same name
+        $model = new Agents();
+        $results = $model->check_other_client_with_same_name($id_client, $_POST['text_name']);
+
+        // check if there is...
+        if ($results['status']) {
+            $_SESSION['server_error'] = "Já existe outro cliente com o mesmo nome.";
+            $this->edit_client(aes_encrypt($id_client));
+            return;
+        }
+
+        // updates the agent's client data in the database
+        $model->update_client_data($id_client, $_POST);
+
+        // logger
+        logger(get_active_user_name() . " - atualizou dados do cliente ID: " . $id_client);
+
+        // returns to the main client's page
+        $this->my_clients();
     }
 
     public function delete_client($id)
