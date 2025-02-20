@@ -3,6 +3,7 @@
 namespace bng\Models;
 
 use bng\Models\BaseModel;
+use mysqli;
 
 class Agents extends BaseModel
 {
@@ -174,5 +175,38 @@ class Agents extends BaseModel
                 ")",
             $params
         );
+    }
+
+    public function get_client_data($id_client)
+    {
+        $params = [
+            ':id_client' => $id_client
+        ];
+
+        $this->db_connect();
+        $results = $this->query(
+            "SELECT " .
+                "id, " .
+                "AES_DECRYPT(name, '" . MYSQL_AES_KEY . "') name, " .
+                "gender, " .
+                "birthdate, " .
+                "AES_DECRYPT(email, '" . MYSQL_AES_KEY . "' ) email, " .
+                "AES_DECRYPT(phone, '" . MYSQL_AES_KEY . "' ) phone, " .
+                "interests " .
+                "FROM persons " .
+                "WHERE id = :id_client",
+            $params
+        );
+
+        if ($results->affected_rows == 0) {
+            return [
+                'status' => 'error'
+            ];
+        }
+
+        return [
+            'status' => 'success',
+            'data' => $results->results[0]
+        ];
     }
 }

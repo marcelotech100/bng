@@ -150,7 +150,46 @@ class Agent extends BaseController
 
     public function edit_client($id)
     {
-        echo "editar " . aes_decrypt($id);
+        if (!check_session() || $_SESSION['user']->profile != 'agent') {
+            header('Location: index.php');
+        }
+
+        // check if the $id is valid
+        $id_client = aes_decrypt($id);
+        if (!$id_client) {
+
+            // id_client is invalid
+            header('Location: index.php');
+        }
+
+        // loads the model to get the client's data
+        $model = new Agents();
+        $results = $model->get_client_data($id_client);
+
+        // check if the client data exists
+        if ($results['status'] == 'error') {
+
+            // invalid client data
+            header('Location: index.php');
+        }
+
+        $data['client'] = $results['data'];
+        $data['client']->birthdate = date('d-m-Y', strtotime($data['client']->birthdate));
+
+        // display the edit client form
+        $data['user'] = $_SESSION['user'];
+        $data['flatpickr'] = true;
+
+        $this->view('layouts/html_header', $data);
+        $this->view('navbar', $data);
+        $this->view('edit_client_frm', $data);
+        $this->view('footer');
+        $this->view('layouts/html_footer');
+    }
+
+    public function edit_client_submit()
+    {
+        printData($_POST);
     }
 
     public function delete_client($id)
