@@ -266,4 +266,15 @@ class Agents extends BaseModel
 
         );
     }
+
+    public function delete_client($id_client)
+    {
+        // deletes the client from the database (hard delete)
+        $params = [
+            ':id' => $id_client
+        ];
+
+        $this->db_connect();
+        $this->non_query("DELETE FROM persons WHERE id = :id", $params);
+    }
 }
