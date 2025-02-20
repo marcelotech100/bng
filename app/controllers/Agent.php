@@ -141,6 +141,9 @@ class Agent extends BaseController
         // add new client to the database
         $model->add_new_client_to_database($_POST);
 
+        // logger
+        logger(get_active_user_name() . " - adicionou novo cliente: " .  $_POST['text_name'] . ' | ' . $_POST['text_email']);
+
         // return to the main clients page
         $this->my_clients();
     }

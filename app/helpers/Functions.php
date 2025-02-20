@@ -60,6 +60,11 @@ function aes_decrypt($value)
     return openssl_decrypt(hex2bin($value), 'aes-256-cbc', OPENSSL_KEY, OPENSSL_RAW_DATA, OPENSSL_IV);
 }
 
+function get_active_user_name()
+{
+    return $_SESSION['user']->name;
+}
+
 function printData($data, $die = true)
 {
     echo "<pre>";

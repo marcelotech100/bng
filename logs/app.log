@@ -19,3 +19,4 @@
 [2025-02-19T20:30:00.736732+00:00] app_logs.INFO: agente2@bng.com - fez logout [] []
 [2025-02-19T20:30:09.305294+00:00] app_logs.ERROR: agente1@bng.com - login inválido [] []
 [2025-02-19T20:30:25.229500+00:00] app_logs.INFO: agente1@bng.com - login com sucesso [] []
+[2025-02-20T02:09:17.490077+00:00] app_logs.INFO: agente1@bng.com - adicionou novo cliente: Rui Martins | rui@gmail.com [] []
