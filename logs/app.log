@@ -35,3 +35,4 @@
 [2025-02-20T16:17:44.652863+00:00] app_logs.INFO: agente1@bng.com - atualizou dados do cliente ID: 7 [] []
 [2025-02-20T20:10:19.563678+00:00] app_logs.INFO: agente1@bng.com - eliminado o cliente id: 7 [] []
 [2025-02-20T20:10:29.162481+00:00] app_logs.INFO: agente1@bng.com - eliminado o cliente id: 6 [] []
+[2025-02-21T02:42:07.143184+00:00] app_logs.INFO: agente1@bng.com - login com sucesso [] []
