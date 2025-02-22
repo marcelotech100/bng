@@ -411,11 +411,43 @@ class Agent extends BaseController
         // move file to final destination
         $file_path = __DIR__ . '/../../uploads/dados_' . time() . '.' . $extension;
         if (move_uploaded_file($_FILES['clients_file']['tmp_name'], $file_path)) {
-            die('Ficheiro carregado com sucesso!');
+
+            // validates the header
+            $result = $this->has_valid_header($file_path);
+            var_dump($result);
         } else {
             $_SESSION['server_error'] = "Aconteceu um erro inesperado no carregamento do ficheiro";
             $this->upload_file_frm();
             return;
         }
+    }
+
+    private function has_valid_header($file_path)
+    {
+        // validates the file
+        $data = [];
+        $file_info = pathinfo($file_path);
+
+        if ($file_info['extension'] == 'csv') {
+
+            // opens the CSV file to read the header only
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Csv();
+            $reader->setInputEncoding('UTF-8');
+            $reader->setDelimiter(';');
+            $reader->setEnclosure('');
+            $sheet = $reader->load($file_path);
+            $data = $sheet->getActiveSheet()->toArray()[0];
+        } else if ($file_info['extension'] == 'xlsx') {
+
+            // opens the XLSX file to read the header only
+            $reader = new \PhpOffice\PhpSpreadsheet\Reader\Xlsx();
+            $reader->setReadDataOnly(true);
+            $spreadsheet = $reader->load($file_path);
+            $data = $spreadsheet->getActiveSheet()->toArray()[0];
+        }
+
+        // check if the header content is valid
+        $valid_header = 'name,gender,birthdate,email,phone,interests';
+        return implode(',', $data) == $valid_header ? true : false;
     }
 }
