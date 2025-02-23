@@ -521,6 +521,9 @@ class Agent extends BaseController
         // creates a loop to insert each record
         foreach ($data as $client) {
 
+            // checks if row contains data or not
+            if (empty($client[0])) continue;
+
             // report
             $report['total']++;
 
@@ -561,5 +564,45 @@ class Agent extends BaseController
 
         // displays the upload form again
         $this->upload_file_frm();
+    }
+
+    public function export_clients_xlsx()
+    {
+        if (!check_session() || $_SESSION['user']->profile != 'agent') {
+            header('Location: index.php');
+        }
+
+        // gets all agent clients
+        $model = new Agents();
+        $results = $model->get_agent_clients($_SESSION['user']->id);
+
+        // adds header to collection
+        $data[] = ['name', 'gender', 'birthdate', 'email', 'phone', 'interests', 'created_at', 'updated_at'];
+
+        // places all clients in the $data collection
+        foreach ($results['data'] as $client) {
+
+            // removes the first property (id)
+            unset($client->id);
+
+            // adds data as array (original $client is a stdClass object)
+            $data[] = (array) $client;
+        }
+
+        // stores the data into XLSX file
+        $filename = 'output_' . time() . '.xlsx';
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $spreadsheet->removeSheetByIndex(0);
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'dados');
+        $spreadsheet->addSheet($worksheet);
+        $worksheet->fromArray($data);
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename= "' . urlencode($filename) . '"');
+        $writer->save('php://output');
+
+        // Logger
+        logger(get_active_user_name() . " - fez download da lista de clientes para o ficheiro: " . $filename . " | total: " . count($data) - 1 . " registros.");
     }
 }
