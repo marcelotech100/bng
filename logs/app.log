@@ -98,3 +98,5 @@
 [2025-02-23T02:28:37.395267+00:00] app_logs.ERROR: agente1@bng.com - login inválido [] []
 [2025-02-23T02:28:48.053767+00:00] app_logs.INFO: agente1@bng.com - login com sucesso [] []
 [2025-02-24T15:43:46.730900+00:00] app_logs.INFO: admin@bng.com - login com sucesso [] []
+[2025-02-24T19:37:25.329596+00:00] app_logs.INFO: admin@bng.com - fez o download da lista de clientes para o ficheiro: output_1740425833.xlsx | total: 9 registros. [] []
+[2025-02-24T19:45:03.228616+00:00] app_logs.INFO: admin@bng.com - fez o download da lista de clientes para o ficheiro: output_1740426296.xlsx | total: 9 registros. [] []
