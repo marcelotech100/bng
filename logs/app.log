@@ -97,3 +97,4 @@
 [2025-02-23T02:28:22.957653+00:00] app_logs.INFO: agente1@bng.com - fez logout [] []
 [2025-02-23T02:28:37.395267+00:00] app_logs.ERROR: agente1@bng.com - login inválido [] []
 [2025-02-23T02:28:48.053767+00:00] app_logs.INFO: agente1@bng.com - login com sucesso [] []
+[2025-02-24T15:43:46.730900+00:00] app_logs.INFO: admin@bng.com - login com sucesso [] []
