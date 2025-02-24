@@ -18,6 +18,13 @@ class Admin extends BaseController
         $model = new AdminModel();
         $results = $model->get_all_clients();
 
-        printData($results);
+        $data['user'] = $_SESSION['user'];
+        $data['clients'] = $results->results;
+
+        $this->view('layouts/html_header');
+        $this->view('navbar', $data);
+        $this->view('global_clients', $data);
+        $this->view('footer');
+        $this->view('layouts/html_footer');
     }
 }
