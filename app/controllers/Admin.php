@@ -69,4 +69,25 @@ class Admin extends BaseController
         // logger
         logger(get_active_user_name() . " - fez o download da lista de clientes para o ficheiro: " . $filename . " | total: " . count($data) - 1 . " registros.");
     }
+
+    public function stats()
+    {
+        // checks if session has an user with admin profile
+        if (!check_session() || $_SESSION['user']->profile != 'admin') {
+            header('Location: index.php');
+        }
+
+        // gets totals from agent's clients
+        $model = new AdminModel();
+        $data['agents'] = $model->get_agents_clients_stats();
+
+        // displays the stats page
+        $data['user'] = $_SESSION['user'];
+
+        $this->view('layouts/html_header');
+        $this->view('navbar', $data);
+        $this->view('stats', $data);
+        $this->view('footer');
+        $this->view('layouts/html_footer');
+    }
 }

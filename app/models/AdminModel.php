@@ -30,4 +30,26 @@ class AdminModel extends BaseModel
 
         return $results;
     }
+
+    public function get_agents_clients_stats()
+    {
+        // gets total from agent's clients
+        $sql =
+            "SELECT * FROM (" .
+            "SELECT " .
+            "p.id_agent, " .
+            "AES_DECRYPT(a.name, '" . MYSQL_AES_KEY . "') agente, " .
+            "COUNT(*) total_clientes " .
+            "FROM persons p " .
+            "LEFT JOIN agents a " .
+            "ON a.id = p.id_agent " .
+            "WHERE p.deleted_at IS NULL " .
+            "GROUP BY id_agent ) a " .
+            "ORDER BY total_clientes DESC";
+
+        $this->db_connect();
+        $results = $this->query($sql);
+
+        return $results->results;
+    }
 }
