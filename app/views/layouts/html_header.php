@@ -25,11 +25,16 @@
     <?php endif; ?>
 
     <!-- jquery -->
-     <script src="assets/jquery/jquery-3.6.0.min.js"></script>
+    <script src="assets/jquery/jquery-3.6.0.min.js"></script>
 
     <!-- datatables -->
     <link rel="stylesheet" href="assets/datatables/datatables.min.css">
     <script src="assets/datatables/datatables.min.js"></script>
+
+    <?php if (isset($chartjs)): ?>
+        <!-- chartjs -->
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <?php endif; ?>
 </head>
 
 <body>

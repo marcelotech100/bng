@@ -43,7 +43,7 @@
                 <div class="col-sm-6 col-12 p-1">
                     <div class="card p-3">
                         <h4><i class="fa-solid fa-users me-2"></i>Gráfico</h4>
-                        [gráfico]
+                        <canvas id="chartjs_chart" height="400px"></canvas>
                     </div>
                 </div>
             </div>
@@ -103,4 +103,28 @@
             }
         });
     })
+
+    // chartjs
+    <?php if (count($agents) != 0): ?>
+        new Chart(
+            document.querySelector('#chartjs_chart'), {
+                type: 'bar',
+                data: {
+                    labels: <?= $chart_labels ?>,
+                    datasets: [{
+                        label: 'Total de clientes por agente',
+                        data: <?= $chart_totals ?>,
+                        backgroundColor: 'rgb(50,100,200)',
+                    }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            }
+        );
+    <?php endif; ?>
 </script>
