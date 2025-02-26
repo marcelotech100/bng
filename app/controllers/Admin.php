@@ -97,6 +97,9 @@ class Admin extends BaseController
             $data['chartjs'] = true;
         }
 
+        // gets global stats
+        $data['global_stats'] = $model->get_global_stats();
+
         $this->view('layouts/html_header', $data);
         $this->view('navbar', $data);
         $this->view('stats', $data);
