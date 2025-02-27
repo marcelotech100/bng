@@ -70,7 +70,7 @@
                                     </tr>
                                     <tr>
                                         <td class="text-start">Número médio de clientes por agente:</td>
-                                        <td class="text-start"><strong><?= sprintf("%d", $global_stats['average_clients_per_agent']->value) ?></strong></td>
+                                        <td class="text-start"><strong><?= sprintf("%.2f", $global_stats['average_clients_per_agent']->value) ?></strong></td>
                                     </tr>
                                     <tr>
                                         <td class="text-start">Idade do cliente mais novo:</td>
@@ -97,6 +97,9 @@
                                     </tr>
                                 </table>
                             </div>
+                        </div>
+                        <div class="text-center">
+                            <a href="?ct=admin&mt=create_pdf_report" target="_blank" class="btn btn-secondary px-4"><i class="fa-solid fa-file-pdf me-2"></i>Criar relatório em PDF</a>
                         </div>
                     </div>
 
