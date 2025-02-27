@@ -7,7 +7,7 @@
                     <h4>Gestão de agentes</h4>
                 </div>
                 <div class="col text-end">
-                    <a href="#" class="btn btn-secondary"><i class="fa-solid fa-user-plus me-2"></i>Novo agente</a>
+                    <a href="?ct=admin&mt=new_agent_frm" class="btn btn-secondary"><i class="fa-solid fa-user-plus me-2"></i>Novo agente</a>
                 </div>
             </div>
 
