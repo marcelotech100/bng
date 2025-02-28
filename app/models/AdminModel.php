@@ -152,4 +152,47 @@ class AdminModel extends BaseModel
             return true;
         }
     }
+
+    public function add_new_agent($data)
+    {
+        // adds new agent to the database
+
+        // generates purl
+        $chars = 'abcdefghijkabcdefghijkabcdefghijkABCDEFGHIJKABCDEFGHIJKABCDEFGHIJK';
+        $purl = substr(str_shuffle($chars), 0, 20);
+
+        $params = [
+            ':name' => $data['text_name'],
+            ':profile' => $data['select_profile'],
+            ':purl' => $purl
+        ];
+
+        $this->db_connect();
+        $results = $this->non_query(
+            "INSERT INTO agents VALUES(" .
+                "0, " .
+                "AES_ENCRYPT(:name, '" . MYSQL_AES_KEY . "'), " .
+                "NULL, "     .
+                ":profile, " .
+                ":purl, "    .
+                "NULL, "     .
+                "NULL, "     .
+                "NOW(), "    .
+                "NULL, "     .
+                "NULL)",
+            $params
+        );
+
+        if ($results->affected_rows == 0) {
+            return [
+                'status' => 'error'
+            ];
+        } else {
+            return [
+                'status' => 'success',
+                'email' => $data['text_name'],
+                'purl' => $purl
+            ];
+        }
+    }
 }

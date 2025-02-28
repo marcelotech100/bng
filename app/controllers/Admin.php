@@ -319,6 +319,12 @@ class Admin extends BaseController
             return;
         }
 
-        die('OK');
+        // adds new agent to the database
+        $results = $model->add_new_agent($_POST);
+
+        printData($results);
+
+        // vamos enviar um email para o novo agente para que possa definir a sua password
+
     }
 }
