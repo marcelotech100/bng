@@ -304,7 +304,37 @@ class Main extends BaseController
 
    public function define_password($purl = '')
    {
-      die($purl);
+      // if there is an opened session, gets out!
+      if (check_session()) {
+         $this->index();
+         return;
+      }
+
+      // checks if the purl is valid
+      if (empty($purl) || strlen($purl) != 20) {
+         die('Erro nas credenciais de acesso.');
+      }
+
+      // checks if there is a new agent with this purl
+      $model = new Agents();
+      $results = $model->check_new_agent_purl($purl);
+
+      if (!$results['status']) {
+         die('Erro nas credenciais de acesso.');
+      }
+
+      $data['purl'] = $purl;
+      $data['id'] = $results['id'];
+
+      // displays the define password view
+      $this->view('layouts/html_header');
+      $this->view('new_agent_define_password', $data);
+      $this->view('layouts/html_footer');
+   }
+
+   public function define_password_submit()
+   {
+      die('OK');
    }
 }
 
