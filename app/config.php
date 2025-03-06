@@ -16,3 +16,13 @@ define('LOGS_PATH',         __DIR__ . '/../logs/app.log');
 // openssl
 define('OPENSSL_KEY',       'H0SDRQzIGqclX2kbYBk9xspdn9U5f3Wa');
 define('OPENSSL_IV',        'BzKAbjuREsHgnw56');
+
+// Url Base
+define('BASE_URL', 'http://localhost/bng/public/');
+
+// email (define your credentials here)
+define('EMAIL_HOST',      '');
+define('EMAIL_USERNAME',  '');
+define('EMAIL_PASSWORD',  '');
+define('EMAIL_PORT',      '');
+define('EMAIL_FROM',      'general@bng.com');
