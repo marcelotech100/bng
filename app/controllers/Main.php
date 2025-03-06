@@ -323,6 +323,12 @@ class Main extends BaseController
          die('Erro nas credenciais de acesso.');
       }
 
+      // checks for validation error
+      if (isset($_SESSION['validation_error'])) {
+         $data['validation_error'] = $_SESSION['validation_error'];
+         unset($_SESSION['validation_error']);
+      }
+
       $data['purl'] = $purl;
       $data['id'] = $results['id'];
 
@@ -334,7 +340,96 @@ class Main extends BaseController
 
    public function define_password_submit()
    {
-      die('OK');
+      // if there is an opened session, gets out!
+      if (check_session()) {
+         $this->index();
+         return;
+      }
+
+      // checks if there was a post
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+         $this->index();
+         return;
+      }
+
+      // form validation - checks for hidden fields
+      if (empty($_POST['purl']) || empty($_POST['id']) || strlen($_POST['purl']) != 20) {
+         $this->index();
+         return;
+      }
+
+      // gets hidden fields
+      $id = aes_decrypt($_POST['id']);
+      $purl = $_POST['purl'];
+
+      // checks if id is valid
+      if (!$id) {
+         $this->index();
+         return;
+      }
+
+      // gets the input values
+      $password = $_POST['text_password'];
+      $repeat_password = $_POST['text_repeat_password'];
+
+      // form validation - checks password's structure
+      if (empty($password)) {
+         $_SESSION['validation_error'] = "Password é de preenchimento obrigatório.";
+         $this->define_password($purl);
+         return;
+      }
+
+      if (empty($repeat_password)) {
+         $_SESSION['validation_error'] = "Repetir a password é de preechimento obrigatório.";
+         $this->define_password($purl);
+         return;
+      }
+
+      if (strlen($password) < 6 || strlen($password) > 12) {
+         $_SESSION['validation_error'] = "A password deve ter entre 6 e 12 caracteres.";
+         $this->define_password($purl);
+         return;
+      }
+
+      if (strlen($repeat_password) < 6 || strlen($repeat_password) > 12) {
+         $_SESSION['validation_error'] = "A repetição da password deve ter entre 6 e 12 caracteres.";
+         $this->define_password($purl);
+         return;
+      }
+
+      // checks if all password have , at least one upper, one lower and one digit
+
+      // use positive look ahead
+      if (!preg_match("/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/", $password)) {
+         $_SESSION['validation_error'] = "A password deve ter, pelo menos, uma maiúscula, uma minúscula e um dígito.";
+         $this->define_password($purl);
+         return;
+      }
+
+      if (!preg_match("/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/", $repeat_password)) {
+         $_SESSION['validation_error'] = "A repetição da password deve ter, pelo menos, uma maiúscula, uma minúscula e um dígito.";
+         $this->define_password($purl);
+         return;
+      }
+
+      // checks if the password and repeat password are equal values
+      if ($password != $repeat_password) {
+         $_SESSION['validation_error'] = "A password e a sua repetição não são iguais.";
+         $this->define_password($purl);
+         return;
+      }
+
+      // updates the database with the agent's password
+      $model = new Agents();
+      $model->set_agent_password($id, $password);
+
+      // logger
+      logger("Foi definida com sucesso a password para o agente ID = $id (purl: $purl)");
+
+      // displays the view with success page
+      $this->view('layouts/html_header');
+      $this->view('reset_password_define_password_success');
+      $this->view('layouts/html_footer');
    }
 }
 

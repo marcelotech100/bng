@@ -346,4 +346,23 @@ class Agents extends BaseModel
             ];
         }
     }
+
+    public function set_agent_password($id, $new_passwrd)
+    {
+        // updates the current user password
+        $params = [
+            ':passwrd' => password_hash($new_passwrd, PASSWORD_DEFAULT),
+            ':id' => $id
+        ];
+
+        $this->db_connect();
+        $this->non_query(
+            "UPDATE agents SET " .
+                "passwrd = :passwrd, " .
+                "purl = NULL, " .
+                "updated_at = NOW() " .
+                "WHERE id = :id",
+            $params
+        );
+    }
 }
