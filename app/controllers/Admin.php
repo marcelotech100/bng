@@ -4,6 +4,7 @@ namespace bng\Controllers;
 
 use bng\Controllers\BaseController;
 use bng\Models\AdminModel;
+use bng\System\SendEmail;
 
 class Admin extends BaseController
 {
@@ -322,9 +323,41 @@ class Admin extends BaseController
         // adds new agent to the database
         $results = $model->add_new_agent($_POST);
 
-        printData($results);
+        if ($results['status'] == 'error') {
 
-        // vamos enviar um email para o novo agente para que possa definir a sua password
+            // logger
+            logger(get_current_user() . " - aconteceu um erro na criação do novo registro de agente.");
+            header('Location: index.php');
+            return;
+        }
 
+        // sends email with purl
+        $url = BASE_URL . '?ct=main&mt=define_password&purl=' . $results['purl'];
+        $email = new SendEmail();
+        $data = [
+            'to' => $_POST['text_name'],
+            'link' => $url
+        ];
+
+        $results = $email->send_email(APP_NAME . ' Conclusao do registro do agente', 'email_body_new_agent', $data);
+        if ($results['status'] == 'error') {
+
+            // logger
+            logger(get_current_user() . " - não foi possível enviar o email para conclusão do registro: " . $_POST['text_name']);
+            die($results['message']);
+        }
+
+        // logger
+        logger(get_current_user() . " - enviado com sucesso email para conclusão do registro: " . $_POST['text_name']);
+
+        // displays the success page
+        $data['user'] = $_SESSION['user'];
+        $data['email'] = $_POST['text_name'];
+
+        $this->view('layouts/html_header', $data);
+        $this->view('navbar', $data);
+        $this->view('agents_email_sent', $data);
+        $this->view('footer');
+        $this->view('layouts/html_footer');
     }
 }
