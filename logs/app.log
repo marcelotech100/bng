@@ -150,3 +150,7 @@
 [2025-03-07T15:27:28.121572+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 11 - agente4@bng.com [] []
 [2025-03-07T15:43:21.268544+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 3 - agente2alterado@bng.com [] []
 [2025-03-07T15:44:23.590644+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 3 - agente2@bng.com [] []
+[2025-03-07T16:01:03.427959+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 3 - agente2@bng.com [] []
+[2025-03-07T16:02:40.724074+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 3 - agente2@bng.com [] []
+[2025-03-07T16:04:14.324326+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 3 - agente2@bng.com [] []
+[2025-03-07T16:05:59.163468+00:00] app_logs.INFO: marce - enviado com sucesso email para conclusão do registro: agente5@bng.com [] []

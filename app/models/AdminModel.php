@@ -121,6 +121,7 @@ class AdminModel extends BaseModel
             "SELECT " .
                 "id, " .
                 "AES_DECRYPT(name, '" . MYSQL_AES_KEY . "') name, " .
+                "passwrd, " .
                 "profile, " .
                 "last_login, " .
                 "created_at, " .
