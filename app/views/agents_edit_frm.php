@@ -22,7 +22,7 @@
                                 <label for="select_profile" class="form-label">Perfil</label>
                                 <select name="select_profile" id="select_profile" class="form-control" required>
                                     <option value="admin" <?= $agent->profile == 'admin' ? 'selected' : '' ?>>Administrador</option>
-                                    <option value="agente" <?= $agent->profile == 'agent' ? 'selected' : '' ?>>Agente</option>
+                                    <option value="agent" <?= $agent->profile == 'agent' ? 'selected' : '' ?>>Agente</option>
                                 </select>
                             </div>
 
@@ -31,9 +31,17 @@
                                 <button type="submit" class="btn btn-secondary px-4"><i class="fa-solid fa-pen-to-square me-2"></i>Atualizar</button>
                             </div>
 
-                            <div class="alert alert-danger p-2 text-center">
-                                [mensagem de erro]
-                            </div>
+                            <?php if (!empty($validation_error)): ?>
+                                <div class="alert alert-danger p-2 text-center">
+                                    <?= $validation_error ?>
+                                </div>
+                            <?php endif; ?>
+
+                            <?php if (!empty($server_error)): ?>
+                                <div class="alert alert-danger p-2 text-center">
+                                    <?= $server_error ?>
+                                </div>
+                            <?php endif; ?>
 
                         </form>
                     </div>

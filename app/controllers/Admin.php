@@ -382,6 +382,18 @@ class Admin extends BaseController
         $model = new AdminModel();
         $results = $model->get_agent_data($id);
 
+        // validation error
+        if (isset($_SESSION['validation_error'])) {
+            $data['validation_error'] = $_SESSION['validation_error'];
+            unset($_SESSION['validation_error']);
+        }
+
+        // server error
+        if (isset($_SESSION['server_error'])) {
+            $data['server_error'] = $_SESSION['server_error'];
+            unset($_SESSION['server_error']);
+        }
+
         $data['user'] = $_SESSION['user'];
         $data['agent'] = $results->results[0];
 
@@ -405,6 +417,63 @@ class Admin extends BaseController
             header('Location: index.php');
         }
 
-        die('OK!');
+        // checks if idis present and valid
+        if (empty($_POST['id'])) {
+            header('Location: index.php');
+        }
+
+        $id = aes_decrypt($_POST['id']);
+        if (!$id) {
+            header('Location: index.php');
+        }
+
+        // form validation
+        $validation_error = null;
+
+        // checks if agent is a valid email
+        if (empty($_POST['text_name']) || !filter_var($_POST['text_name'], FILTER_VALIDATE_EMAIL)) {
+            $validation_error = "O nome do agente deve ser um email válido.";
+        }
+
+        // checks if profile is valid
+        $valid_profiles = ['admin', 'agent'];
+        if (empty($_POST['select_profile']) || !in_array($_POST['select_profile'], $valid_profiles)) {
+            $validation_error = "O perfil selecionado é inválido.";
+        }
+
+        if (!empty($validation_error)) {
+            $_SESSION['validation_error'] = $validation_error;
+            $this->edit_agent(aes_encrypt($id));
+            return;
+        }
+
+        // checks if there is already another agent with the same username
+        $model = new AdminModel();
+        $results = $model->check_if_another_user_exists_with_same_name($id, $_POST['text_name']);
+
+        if ($results) {
+
+            // there is another agent with the same name (email)
+            $_SESSION['server_error'] = "Já existe outro agente com o mesmo nome.";
+            $this->edit_agent(aes_encrypt($id));
+            return;
+        }
+
+        // edits agent in the database
+        $results = $model->edit_agent($id, $_POST);
+
+        if ($results->status == 'error') {
+
+            // logger
+            logger(get_active_user_name() . " - aconteceu um erro na edição de dados do agente ID: $id", 'error');
+            header('Location: index.php');
+        } else {
+
+            // logger
+            logger(get_active_user_name() . " - editado com sucesso os dados do agente ID: $id - " . $_POST['text_name']);
+        }
+
+        // goes to the main admin page
+        $this->agents_management();
     }
 }

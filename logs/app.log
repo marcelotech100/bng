@@ -146,3 +146,7 @@
 [2025-03-07T01:18:47.176132+00:00] app_logs.INFO: admin@bng.com - fez logout [] []
 [2025-03-07T14:09:13.838160+00:00] app_logs.ERROR: admin@bng.com - login inválido [] []
 [2025-03-07T14:09:21.849750+00:00] app_logs.INFO: admin@bng.com - login com sucesso [] []
+[2025-03-07T15:27:23.156916+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 3 - agente2@bng.com [] []
+[2025-03-07T15:27:28.121572+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 11 - agente4@bng.com [] []
+[2025-03-07T15:43:21.268544+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 3 - agente2alterado@bng.com [] []
+[2025-03-07T15:44:23.590644+00:00] app_logs.INFO: admin@bng.com - editado com sucesso os dados do agente ID: 3 - agente2@bng.com [] []
