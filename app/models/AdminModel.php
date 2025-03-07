@@ -261,4 +261,64 @@ class AdminModel extends BaseModel
 
         return $results;
     }
+
+    public function get_agent_data_and_total_clients($id)
+    {
+        // returns the agent personal data and total clients
+        $params = [
+            ':id' => $id
+        ];
+
+        $this->db_connect();
+        $results = $this->query(
+            "SELECT " .
+                "id, " .
+                "AES_DECRYPT(name, '" . MYSQL_AES_KEY . "') name, " .
+                "profile, " .
+                "created_at, " .
+                "updated_at, " .
+                "deleted_at, " .
+                "(SELECT COUNT(*) FROM persons WHERE id_agent = :id) total_clients " .
+                "FROM agents " .
+                'WHERE id = :id',
+            $params
+        );
+        return $results;
+    }
+
+    public function delete_agent($id)
+    {
+        // soft deletes the agent
+        $params = [
+            ':id' => $id
+        ];
+
+        $this->db_connect();
+        $results = $this->non_query(
+            "UPDATE agents SET " .
+                "deleted_at = NOW() " .
+                "WHERE id = :id",
+            $params
+        );
+
+        return $results;
+    }
+
+    public function recover_agent($id)
+    {
+        // recovers the agent
+        $params = [
+            ':id' => $id
+        ];
+
+        $this->db_connect();
+        $results = $this->non_query(
+            "UPDATE agents SET " .
+                "deleted_at = NULL " .
+                "WHERE id = :id",
+            $params
+        );
+
+        return $results;
+    }
 }

@@ -30,6 +30,13 @@ class Agents extends BaseModel
             ];
         }
 
+        // if password is null, returns false
+        if (!$results->results[0]->passwrd) {
+            return [
+                'status' => false
+            ];
+        }
+
         // there is an user with that name (username)
         // check if the password is correct
         if (!password_verify($password, $results->results[0]->passwrd)) {
