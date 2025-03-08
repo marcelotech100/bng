@@ -528,7 +528,101 @@ class Main extends BaseController
 
    public function insert_code($id = '')
    {
-      echo $id;
+      // if there is an opened session, gets out!
+      if (check_session()) {
+         $this->index();
+         return;
+      }
+
+      // checks if id is valid
+      if (empty($id)) {
+         $this->index();
+         return;
+      }
+
+      $id = aes_decrypt($id);
+      if (!$id) {
+         $this->index();
+         return;
+      }
+
+      $data['id'] = $id;
+
+      // checks for validation errors or server errors
+      if (isset($_SESSION['validation_error'])) {
+         $data['validation_error'] = $_SESSION['validation_error'];
+         unset($_SESSION['validation_error']);
+      }
+
+      if (isset($_SESSION['server_error'])) {
+         $data['server_error'] = $_SESSION['server_error'];
+         unset($_SESSION['server_error']);
+      }
+
+      // displays the view
+      $this->view('layouts/html_header');
+      $this->view('reset_password_insert_code', $data);
+      $this->view('layouts/html_footer');
+   }
+
+   public function insert_code_submit($id = '')
+   {
+      // if there is an opened session, gets out!
+      if (check_session()) {
+         $this->index();
+         return;
+      }
+
+      // checks if id is valid
+      if (empty($id)) {
+         $this->index();
+         return;
+      }
+
+      $id = aes_decrypt($id);
+      if (!$id) {
+         $this->index();
+         return;
+      }
+
+      // checks if it is a post
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+         $this->index();
+         return;
+      }
+
+      // form validation
+      if (empty($_POST['text_code'])) {
+         $_SESSION['validation_error'] = "Código é de preenchimento obrigatório.";
+         $this->insert_code(aes_encrypt($id));
+         return;
+      }
+
+      $code = $_POST['text_code'];
+
+      if (!preg_match("/^\d{6}$/", $code)) {
+         $_SESSION['validation_error'] = "O código é constituído por 6 algarismos.";
+         $this->insert_code(aes_encrypt($id));
+         return;
+      }
+
+      // checks if the code is the same that is stored in the database
+      $model = new Agents();
+      $results = $model->check_if_reset_code_is_correct($id, $code);
+
+      if (!$results['status']) {
+         $_SESSION['server_error'] = "Código incorreto.";
+         $this->insert_code(aes_encrypt($id));
+         return;
+      }
+
+      // the code is correct. Let's define the password
+      $this->reset_define_password(aes_encrypt($id));
+   }
+
+   public function reset_define_password($id = '')
+   {
+      die($id);
    }
 }
 

@@ -228,3 +228,4 @@
 
 [2025-03-08T16:07:38.937114+00:00] app_logs.ERROR: Aconteceu um erro na criação do código de recuperação da password. User: teste@teste.com [] []
 [2025-03-08T16:07:57.679275+00:00] app_logs.INFO: Email com código de recuperação de password enviado com sucesso. User: agente1@bng.com | Code: 948492 [] []
+
