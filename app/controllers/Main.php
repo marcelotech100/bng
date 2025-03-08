@@ -622,7 +622,133 @@ class Main extends BaseController
 
    public function reset_define_password($id = '')
    {
-      die($id);
+      // checks if is an opened session, gets out!
+      if (check_session()) {
+         $this->index();
+         return;
+      }
+
+      // checks if id is valid
+      if (empty($id)) {
+         $this->index();
+         return;
+      }
+
+      $id = aes_decrypt($id);
+      if (!$id) {
+         $this->index();
+         return;
+      }
+
+      $data['id'] = $id;
+
+      // checks for validation error
+      if (isset($_SESSION['validation_error'])) {
+         $data['validation_error'] = $_SESSION['validation_error'];
+         unset($_SESSION['validation_error']);
+      }
+
+      // checks for server error
+      if (isset($_SESSION['server_error'])) {
+         $data['server_error'] = $_SESSION['server_error'];
+         unset($_SESSION['server_error']);
+      }
+
+      // displays the form to define the new password
+      $this->view('layouts/html_header');
+      $this->view('reset_password_define_password_frm', $data);
+      $this->view('layouts/html_footer');
+   }
+
+   public function reset_define_password_submit($id = '')
+   {
+      // if there is an opened session, gets out!
+      if (check_session()) {
+         $this->index();
+         return;
+      }
+
+      // checks if id is valid
+      if (empty($id)) {
+         $this->index();
+         return;
+      }
+
+      $id = aes_decrypt($id);
+      if (!$id) {
+         $this->index();
+         return;
+      }
+
+      // checks if there was a post
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+         $this->index();
+         return;
+      }
+
+      // form validation
+      if (empty($_POST['text_new_password'])) {
+         $_SESSION['validation_error'] = "Nova password é de preenchimento obrigatório.";
+         $this->reset_define_password(aes_encrypt($id));
+         return;
+      }
+
+      if (empty($_POST['text_repeat_new_password'])) {
+         $_SESSION['validation_error'] = "A repetição da nova password é de preenchimento obrigatório.";
+         $this->reset_define_password(aes_encrypt($id));
+         return;
+      }
+
+      // gets the input values
+      $new_password         =  $_POST['text_new_password'];
+      $repeat_new_password  =  $_POST['text_repeat_new_password'];
+
+      // checks if all passwords have more than 6 and less than 12 characters
+      if (strlen($new_password) < 6 || strlen($new_password) > 12) {
+         $_SESSION['validation_error'] = "A nova password deve ter entre 6 e 12 caracteres.";
+         $this->reset_define_password(aes_encrypt($id));
+         return;
+      }
+
+      if (strlen($repeat_new_password) < 6 || strlen($repeat_new_password) > 12) {
+         $_SESSION['validation_error'] = "A repetição da nova password deve ter entre 6 e 12 caracteres.";
+         $this->reset_define_password(aes_encrypt($id));
+         return;
+      }
+
+      // checks if all passwords have, at least one upper, one lower and one digit
+
+      // use positive look ahead
+      if (!preg_match("/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/", $new_password)) {
+         $_SESSION['validation_error'] = "A nova password deve ter, pelo menos, uma maiúscula, uma minúscula e um dígito";
+         $this->reset_define_password(aes_encrypt($id));
+         return;
+      }
+
+      if (!preg_match("/(?=.*\d)(?=.*[a-z])(?=.*[A-Z])/", $repeat_new_password)) {
+         $_SESSION['validation_error'] = "A repetição da nova password deve ter, pelo menos, uma maiúscula, uma minúscula e um dígito";
+         $this->reset_define_password(aes_encrypt($id));
+         return;
+      }
+
+      // checks if both passwords are equal
+      if ($new_password != $repeat_new_password) {
+         $_SESSION['validation_error'] = "A nova password e a sua repetição devem ser iguais.";
+         $this->reset_define_password(aes_encrypt($id));
+         return;
+      }
+
+      // updates the agent's password in the database
+      $model = new Agents();
+      $model->change_agent_password($id, $new_password);
+
+      // logger 
+      logger("Foi alterada com sucesso a password do user ID: $id após pedido de reset da password.");
+
+      // displays success page
+      $this->view('layouts/html_header');
+      $this->view('profile_change_password_success');
+      $this->view('layouts/html_footer');
    }
 }
 
