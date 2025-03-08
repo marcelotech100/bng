@@ -30,6 +30,7 @@ class SendEmail
             $mail->addAddress($data['to']);
 
             $mail->isHTML(true);
+            $mail->CharSet = 'UTF-8';
             $mail->Subject = $subject;
             $mail->Body = $this->$body($data);
 
@@ -50,6 +51,13 @@ class SendEmail
     {
         $html = '<p>Para concluir o processo de registro de agente, clique no link abaixo: </p>';
         $html .= '<a href="' . $data['link'] . '">Concluir registro de agente.</a>';
+        return $html;
+    }
+
+    private function codigo_recuperar_password($data)
+    {
+        $html = "<p>Para definir a sua password, use o seguinte código:</p>";
+        $html .= "<h3>{$data['code']}</h3>";
         return $html;
     }
 }

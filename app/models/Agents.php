@@ -373,4 +373,50 @@ class Agents extends BaseModel
             $params
         );
     }
+
+    public function set_code_for_recover_password($username)
+    {
+        // sets a code to recover password, if the account exists
+        $params = [
+            ':username' => $username
+        ];
+
+        $this->db_connect();
+        $results = $this->query(
+            "SELECT id FROM agents " .
+                "WHERE AES_ENCRYPT(:username, '" . MYSQL_AES_KEY . "') = name " .
+                "AND passwrd IS NOT NULL " .
+                "AND deleted_at IS NULL",
+            $params
+        );
+
+        // checks if no agent was found
+        if ($results->affected_rows == 0) {
+            return [
+                'status' => 'error'
+            ];
+        }
+
+        // the agent was found
+        // generate code
+        $code = rand(100000, 999999);
+        $id = $results->results[0]->id;
+        $params = [
+            ':id' => $id,
+            ':code' => $code
+        ];
+
+        $results = $this->non_query(
+            "UPDATE agents SET " .
+                "code = :code " .
+                "WHERE id = :id",
+            $params
+        );
+
+        return [
+            'status' => 'success',
+            'id' => $id,
+            'code' => $code
+        ];
+    }
 }

@@ -4,6 +4,7 @@ namespace bng\Controllers;
 
 use bng\Controllers\BaseController;
 use bng\Models\Agents;
+use bng\System\SendEmail;
 
 class Main extends BaseController
 {
@@ -430,6 +431,104 @@ class Main extends BaseController
       $this->view('layouts/html_header');
       $this->view('reset_password_define_password_success');
       $this->view('layouts/html_footer');
+   }
+
+   public function reset_password()
+   {
+      // if there is an opened session, gets out!
+      if (check_session()) {
+         $this->index();
+         return;
+      }
+
+      $data = [];
+
+      // checks validation errors
+      if (isset($_SESSION['validation_error'])) {
+         $data['validation_error'] = $_SESSION['validation_error'];
+         unset($_SESSION['validation_error']);
+      }
+
+      // checks server error
+      if (isset($_SESSION['server_error'])) {
+         $data['server_error'] = $_SESSION['server_error'];
+         unset($_SESSION['server_error']);
+      }
+
+      // displays the view with success page
+      $this->view('layouts/html_header');
+      $this->view('reset_password_frm', $data);
+      $this->view('layouts/html_footer');
+   }
+
+   public function reset_password_submit()
+   {
+      // if there is an opened session, gets out!
+      if (check_session()) {
+         $this->index();
+         return;
+      }
+
+      // checks if there was a post
+      if ($_SERVER['REQUEST_METHOD'] != 'POST') {
+         $this->index();
+         return;
+      }
+
+      // form validation
+      if (empty($_POST['text_username'])) {
+         $_SESSION['validation_error'] = "Utilizador é de preenchimento obrigatório.";
+         $this->reset_password();
+         return;
+      }
+
+      if (!filter_var($_POST['text_username'], FILTER_VALIDATE_EMAIL)) {
+         $_SESSION['validation_error'] = "Utilizador tem que ser um email válido.";
+         $this->reset_password();
+         return;
+      }
+
+      $username = $_POST['text_username'];
+
+      // sets a code to recover password, sends a email and displays the code page
+      $model = new Agents();
+      $results = $model->set_code_for_recover_password($username);
+
+      if ($results['status'] == 'error') {
+
+         // logger
+         logger("Aconteceu um erro na criação do código de recuperação da password. User: $username", "error");
+         $_SESSION['validation_error'] = "Aconteceu um erro inesperado. Por favor, tente novamente.";
+         $this->reset_password();
+         return;
+      }
+
+      $id = $results['id'];
+      $code = $results['code'];
+
+      // code is stored. Email is sent with the code
+      $mail = new SendEmail();
+      $results = $mail->send_email(APP_NAME . ' - Código para recuperar a password', 'codigo_recuperar_password', ['to' => $username, 'code' => $code]);
+
+      if ($results['status'] == 'error') {
+
+         // logger
+         logger("Aconteceu um erro no envio do email com o código de recuperação da password. User: $username");
+         $_SESSION['validation_error'] = "Aconteceu um erro inesperado. Por favor, tente novamente.";
+         $this->reset_password();
+         return;
+      }
+
+      // logger
+      logger("Email com código de recuperação de password enviado com sucesso. User: $username | Code: $code");
+
+      // the email was sent. Shows the next view
+      $this->insert_code(aes_encrypt($id));
+   }
+
+   public function insert_code($id = '')
+   {
+      echo $id;
    }
 }
 

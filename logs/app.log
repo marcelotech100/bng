@@ -219,3 +219,12 @@
 [2025-03-08T00:18:20.771739+00:00] app_logs.INFO: admin@bng.com - fez download da lista de agentes para o ficheiro: output_1741393100.xlsx | total: 6 registros. [] []
 [2025-03-08T00:26:28.261055+00:00] app_logs.INFO: admin@bng.com - enviado com sucesso email para conclusão do registro: agente7@bng.com [] []
 [2025-03-08T00:27:29.691426+00:00] app_logs.INFO: admin@bng.com - fez download da lista de agentes para o ficheiro: output_1741393649.xlsx | total: 7 registros. [] []
+[2025-03-08T15:49:53.670091+00:00] app_logs.ERROR: Aconteceu um erro na criação do código de recuperação da password. User: teste@teste.com [] []
+[2025-03-08T15:50:01.623830+00:00] app_logs.ERROR: Aconteceu um erro na criação do código de recuperação da password. User: teste@teste.com [] []
+[2025-03-08T15:52:45.280097+00:00] app_logs.ERROR: Aconteceu um erro na criação do código de recuperação da password. User: teste@teste.com [] []
+[2025-03-08T15:55:50.389902+00:00] app_logs.ERROR: Aconteceu um erro na criação do código de recuperação da password. User: teste@teste.com [] []
+
+[2025-03-08T16:05:55.005545+00:00] app_logs.ERROR: Aconteceu um erro na criação do código de recuperação da password. User: teste@teste.com [] []
+
+[2025-03-08T16:07:38.937114+00:00] app_logs.ERROR: Aconteceu um erro na criação do código de recuperação da password. User: teste@teste.com [] []
+[2025-03-08T16:07:57.679275+00:00] app_logs.INFO: Email com código de recuperação de password enviado com sucesso. User: agente1@bng.com | Code: 948492 [] []
