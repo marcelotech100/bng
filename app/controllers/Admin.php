@@ -343,12 +343,12 @@ class Admin extends BaseController
         if ($results['status'] == 'error') {
 
             // logger
-            logger(get_current_user() . " - não foi possível enviar o email para conclusão do registro: " . $_POST['text_name']);
+            logger(get_active_user_name() . " - não foi possível enviar o email para conclusão do registro: " . $_POST['text_name']);
             die($results['message']);
         }
 
         // logger
-        logger(get_current_user() . " - enviado com sucesso email para conclusão do registro: " . $_POST['text_name']);
+        logger(get_active_user_name() . " - enviado com sucesso email para conclusão do registro: " . $_POST['text_name']);
 
         // displays the success page
         $data['user'] = $_SESSION['user'];
@@ -595,5 +595,47 @@ class Admin extends BaseController
 
         // goes to the main page
         $this->agents_management();
+    }
+
+    public function export_agents_xlsx()
+    {
+        // checks if session has an user with admin profile
+        if (!check_session() || $_SESSION['user']->profile != 'admin') {
+            header('Location: index.php');
+        }
+
+        // gets agents data
+        $model = new AdminModel();
+        $results = $model->get_agents_data_and_total_clients();
+        $results = $results->results;
+
+        // adds header to collection
+        $data[] = ['name', 'profile', 'active', 'last login', 'created at', 'updated at', 'deleted at', 'total active clients', 'total deleted clients'];
+
+        // places all agents in the $data collection
+        foreach ($results as $agent) {
+
+            // removes the first property (id)
+            unset($agent->id);
+
+            // adds data as array (original $client is a strClass object)
+            $data[] = (array) $agent;
+        }
+
+        // stores the data into the XLSX file
+        $filename = 'output_' . time() . '.xlsx';
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $spreadsheet->removeSheetByIndex(0);
+        $worksheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, 'dados');
+        $spreadsheet->addSheet($worksheet);
+        $worksheet->fromArray($data);
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . urlencode($filename) . '"');
+        $writer->save('php://output');
+
+        // logger
+        logger(get_active_user_name() . " - fez download da lista de agentes para o ficheiro: " . $filename . " | total: " . count($data) - 1 . " registros.");
     }
 }
