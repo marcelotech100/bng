@@ -10,7 +10,7 @@
 
                         <hr>
 
-                        <form action="?ct=admin&mt=new_agent_submit" method="post" novalidate>
+                        <form action="?ct=admin&mt=new_agent_submit" method="post" >
 
                             <div class="mb-3">
                                 <label for="text_name" class="form-label">Nome do agente</label>

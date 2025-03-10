@@ -10,7 +10,7 @@
 
                         <hr>
 
-                        <form action="?ct=agent&mt=edit_client_submit" method="post" novalidate>
+                        <form action="?ct=agent&mt=edit_client_submit" method="post" >
 
                             <input type="hidden" name="id_client" value="<?= aes_encrypt($client->id) ?>">
 

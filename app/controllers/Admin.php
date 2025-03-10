@@ -206,6 +206,7 @@ class Admin extends BaseController
         } else {
             $html .= '<tr><td>Idade do cliente mais novo:</td><td style="text-align: right;">' . $global_stats['younger_client']->value . ' anos.</td></tr>';
         }
+
         if (empty($global_stats['oldest_client']->value)) {
             $html .= '<tr><td>Idade do cliente mais velho:</td><td style="text-align: right;">-</td></tr>';
         } else {

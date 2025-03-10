@@ -12,7 +12,7 @@
 
                         <hr>
 
-                        <form action="?ct=agent&mt=upload_file_submit" method="post" enctype="multipart/form-data" novalidate>
+                        <form action="?ct=agent&mt=upload_file_submit" method="post" enctype="multipart/form-data" >
 
                             <div class="mb-4">
                                 <label for="clients_file" class="form-label">Ficheiro de clientes</label>

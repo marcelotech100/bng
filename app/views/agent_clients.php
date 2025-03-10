@@ -6,7 +6,9 @@
 
             <div class="row">
                 <div class="col">
-                    <h5><i class="fa-solid fa-user-tie me-2"></i>Agente: <strong><?= $user->name ?></strong></h5>
+                   <a href="?ct=main&mt=index"><i class="fa-solid fa-house"></i></a>
+                   <span class="px-2">|</span>
+                   <i class="fa-solid fa-user-tie me-2"></i> Agente: <strong><?= $user->name ?></strong>
                 </div>
                 <div class="col text-end">
                     <a href="?ct=agent&mt=upload_file_frm" class="btn btn-secondary"><i class="fa-solid fa-upload me-2"></i></i>Carregar ficheiro</a>

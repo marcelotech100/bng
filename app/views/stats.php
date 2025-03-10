@@ -43,7 +43,7 @@
                 <div class="col-sm-6 col-12 p-1">
                     <div class="card p-3">
                         <h4><i class="fa-solid fa-users me-2"></i>Gráfico</h4>
-                        <canvas id="chartjs_chart" height="400px"></canvas>
+                        <canvas id="chartjs_chart" height="300px"></canvas>
                     </div>
                 </div>
             </div>
@@ -74,14 +74,13 @@
                                     </tr>
                                     <tr>
                                         <td class="text-start">Idade do cliente mais novo:</td>
-                                        <td class="text-start"><strong><?= $global_stats['younger_client']->value ?></strong></td>
+                                        <td class="text-start"><strong><?= empty($global_stats['younger_client']->value) ? '' : $global_stats['younger_client']->value ?></strong></td>
                                     </tr>
                                     <tr>
                                         <td class="text-start">Idade do cliente mais velho:</td>
-                                        <td class="text-start"><strong><?= $global_stats['oldest_client']->value ?></strong></td>
+                                        <td class="text-start"><strong><?= empty($global_stats['oldest_client']->value) ? '' : $global_stats['oldest_client']->value ?></strong></td>
                                     </tr>
                                     <tr>
-
                                         <td class="text-start">Média de idades dos clientes</td>
                                         <td class="text-start"><strong><?= sprintf("%.2f", $global_stats['average_age']->value) ?></strong></td>
                                     </tr>
